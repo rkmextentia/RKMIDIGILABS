@@ -149,7 +149,7 @@ Write your breakdown here. You can use markdown headings, bullet points, and cal
 
 ### Advisory & Training Support
 
-Need tailored advisory or team training on this framework? Reach out to the **RKMIDIGILABS** practice at [rkmvedant@gmail.com](mailto:rkmvedant@gmail.com) or call **+91 9371650121**.
+Need tailored advisory or team training on this framework? Reach out to the **RKMIDIGILABS** practice at [rajeshbhagia500@gmail.com](mailto:rajeshbhagia500@gmail.com) or call **+91 9371650121**.
 `;
 
   fs.writeFileSync(targetFilePath, fileContent, 'utf-8');

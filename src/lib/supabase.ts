@@ -161,8 +161,17 @@ export async function getAdminStudentProfiles(): Promise<StudentProfile[]> {
 
     // If empty (fresh start), add default administrator profile for demonstration
     if (studentsMap.size === 0) {
-      studentsMap.set('rkmvedant@gmail.com', {
+      studentsMap.set('rajeshbhagia500@gmail.com', {
         id: 'admin-rkm',
+        email: 'rajeshbhagia500@gmail.com',
+        full_name: 'Rajesh K. M. (Admin)',
+        phone: '+91-98811-XXXXX',
+        role: 'admin',
+        created_at: '2026-09-01T10:00:00.000Z',
+        enrolled_courses: ['course-iso-42001', 'course-eu-ai-act', 'course-nist-ai-rmf']
+      });
+      studentsMap.set('rkmvedant@gmail.com', {
+        id: 'admin-rkm-alt',
         email: 'rkmvedant@gmail.com',
         full_name: 'Rajesh K. M. (Admin)',
         phone: '+91-98811-XXXXX',

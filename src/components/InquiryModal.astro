@@ -27,7 +27,7 @@
             Enquire About Services
           </h3>
           <p class="text-[11px] text-slate-300 font-mono">
-            RKMIDIGILABS • Directly Delivered to rkmvedant@gmail.com
+            RKMIDIGILABS • Directly Delivered to rajeshbhagia500@gmail.com
           </p>
         </div>
       </div>
@@ -160,7 +160,7 @@
           Inquiry Successfully Sent!
         </h4>
         <p class="text-xs text-slate-600 max-w-sm mx-auto mt-1 leading-relaxed">
-          Your service inquiry has been formatted and delivered directly to <strong class="text-black font-bold">rkmvedant@gmail.com</strong>.
+          Your service inquiry has been formatted and delivered directly to <strong class="text-black font-bold">rajeshbhagia500@gmail.com</strong>.
         </p>
       </div>
 
@@ -168,7 +168,7 @@
       <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-left space-y-1 max-w-md mx-auto">
         <div class="flex justify-between"><span class="text-slate-500">Ref ID:</span> <strong id="success-ref-id" class="text-black">--</strong></div>
         <div class="flex justify-between"><span class="text-slate-500">Offering:</span> <strong id="success-service-name" class="text-emerald-700">--</strong></div>
-        <div class="flex justify-between"><span class="text-slate-500">Recipient:</span> <strong class="text-black">rkmvedant@gmail.com</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Recipient:</span> <strong class="text-black">rajeshbhagia500@gmail.com</strong></div>
       </div>
 
       <!-- Dual-Send Backup Options -->
@@ -301,12 +301,12 @@
 
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = '<span>Sending to rkmvedant@gmail.com...</span>';
+          submitBtn.innerHTML = '<span>Sending to rajeshbhagia500@gmail.com...</span>';
         }
 
         let dispatched = false;
         const generatedInqId = 'RKM-INQ-' + Date.now().toString(36).toUpperCase();
-        let mailtoUrl = `mailto:rkmvedant@gmail.com?subject=${encodeURIComponent(`[RKMIDIGILABS Inquiry] ${payload.service} - ${payload.name}`)}&body=${encodeURIComponent(`Dear Rajesh / RKMIDIGILABS Team,\n\nRef: ${generatedInqId}\nService Requested: ${payload.service}\n\nClient Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone}\n\nProject Scope & Questions:\n${payload.description}\n\n--\nSubmitted via RKMIDIGILABS Portal`)}`;
+        let mailtoUrl = `mailto:rajeshbhagia500@gmail.com?subject=${encodeURIComponent(`[RKMIDIGILABS Inquiry] ${payload.service} - ${payload.name}`)}&body=${encodeURIComponent(`Dear Rajesh / RKMIDIGILABS Team,\n\nRef: ${generatedInqId}\nService Requested: ${payload.service}\n\nClient Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone}\n\nProject Scope & Questions:\n${payload.description}\n\n--\nSubmitted via RKMIDIGILABS Portal`)}`;
 
         // 1. If local environment, attempt local dual-stack API server
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -332,7 +332,7 @@
         // 2. If live deployment (or local API offline), use free cloud email dispatcher
         if (!dispatched) {
           try {
-            const res = await fetch('https://formsubmit.co/ajax/rkmvedant@gmail.com', {
+            const res = await fetch('https://formsubmit.co/ajax/rajeshbhagia500@gmail.com', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

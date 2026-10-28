@@ -202,7 +202,7 @@ function generateExecutiveEmailTemplate({ inquiryId, name, email, phone, service
       </div>
     </div>
     <div class="footer">
-      This inquiry was received through the RKMIDIGILABS official portal and delivered directly to rkmvedant@gmail.com.<br>
+      This inquiry was received through the RKMIDIGILABS official portal and delivered directly to rajeshbhagia500@gmail.com.<br>
       © ${new Date().getFullYear()} RKMIDIGILABS • All rights reserved.
     </div>
   </div>
@@ -216,7 +216,7 @@ RKMIDIGILABS - NEW CLIENT SERVICE INQUIRY
 ======================================================
 Ref ID:        ${inquiryId}
 Date:          ${formattedTime} (IST)
-Recipient:     rkmvedant@gmail.com
+Recipient:     rajeshbhagia500@gmail.com
 
 CLIENT CONTACT:
 - Name:        ${name}
@@ -292,7 +292,7 @@ const server = http.createServer((req, res) => {
       time: new Date().toISOString(),
       organization: 'RKMIDIGILABS',
       lead: 'Principal AIGP & GRC Practice Lead',
-      email: 'rkmvedant@gmail.com',
+      email: 'rajeshbhagia500@gmail.com',
       mobile: '+91 9371650121',
       auth: 'Bearer Token Active',
       endpoints: [
@@ -309,7 +309,7 @@ const server = http.createServer((req, res) => {
     });
   }
 
-  // 2. Client Service Inquiry (Public Endpoint - Delivered to rkmvedant@gmail.com)
+  // 2. Client Service Inquiry (Public Endpoint - Delivered to rajeshbhagia500@gmail.com)
   if (pathname === '/api/inquire' && req.method === 'POST') {
     return readBody(async (err, data) => {
       if (err) return sendJson(res, 400, { success: false, error: 'Invalid JSON payload' });
@@ -360,7 +360,7 @@ const server = http.createServer((req, res) => {
         service: targetService,
         description,
         status: 'received',
-        recipient: 'rkmvedant@gmail.com',
+        recipient: 'rajeshbhagia500@gmail.com',
         subject
       };
 
@@ -377,20 +377,20 @@ const server = http.createServer((req, res) => {
       }
 
       console.log(`======================================================`);
-      console.log(`📥 NEW SERVICE INQUIRY RECEIVED FOR rkmvedant@gmail.com`);
+      console.log(`📥 NEW SERVICE INQUIRY RECEIVED FOR rajeshbhagia500@gmail.com`);
       console.log(`ID:      ${inquiryId}`);
       console.log(`From:    ${name} (${email} | ${phone})`);
       console.log(`Service: ${targetService}`);
       console.log(`Subject: ${subject}`);
       console.log(`======================================================`);
 
-      const mailtoUrl = `mailto:rkmvedant@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+      const mailtoUrl = `mailto:rajeshbhagia500@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
 
       return sendJson(res, 200, {
         success: true,
         inquiryId,
-        message: 'Inquiry successfully formatted and delivered for rkmvedant@gmail.com',
-        recipient: 'rkmvedant@gmail.com',
+        message: 'Inquiry successfully formatted and delivered for rajeshbhagia500@gmail.com',
+        recipient: 'rajeshbhagia500@gmail.com',
         subject,
         mailtoUrl,
         timestamp,

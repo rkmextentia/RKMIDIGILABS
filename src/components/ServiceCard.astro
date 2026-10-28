@@ -21,7 +21,7 @@ const {
   highlight = false
 } = Astro.props;
 
-const mailtoUrl = `mailto:rkmvedant@gmail.com?subject=${encodeURIComponent(inquirySubject)}&body=${encodeURIComponent(`Hi RKMIDIGILABS,\n\nI am reaching out regarding ${title}.\n\nOrganization:\nPhone:\nKey Questions:\n\nBest regards,`)}`;
+const mailtoUrl = `mailto:rajeshbhagia500@gmail.com?subject=${encodeURIComponent(inquirySubject)}&body=${encodeURIComponent(`Hi RKMIDIGILABS,\n\nI am reaching out regarding ${title}.\n\nOrganization:\nPhone:\nKey Questions:\n\nBest regards,`)}`;
 ---
 
 <div class={`relative rounded-xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-200 ${
@@ -70,19 +70,27 @@ const mailtoUrl = `mailto:rkmvedant@gmail.com?subject=${encodeURIComponent(inqui
     </div>
   </div>
 
-  <!-- Green Action Button -->
-  <div class="mt-8 pt-6 border-t border-slate-200">
-    <button 
-      type="button"
-      data-service={title}
-      class={`open-inquiry-modal-btn w-full py-3 px-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer ${
+  <!-- Action Buttons -->
+  <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row gap-2.5">
+    <a 
+      href={mailtoUrl}
+      class={`flex-1 py-3 px-4 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors ${
         badgeType === "roadmap"
           ? 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-300'
           : 'bg-[#16A34A] hover:bg-[#15803D] text-white shadow-sm'
       }`}
     >
-      <span>{badgeType === "roadmap" ? "Express Early Interest" : "Enquire with Email"}</span>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      <span>Enquire via Mail</span>
+    </a>
+    <button 
+      type="button"
+      data-service={title}
+      class="open-inquiry-modal-btn px-4 py-3 rounded-lg font-bold text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+      title="Open Quick Web Inquiry Form"
+    >
+      <span>Web Form</span>
+      <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
     </button>
   </div>
 </div>

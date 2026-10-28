@@ -20,7 +20,7 @@
   * Multi-platform Social Media Push (LinkedIn, X / Twitter, WhatsApp Business, Facebook).
 * **Executive Client Service Inquiry System:**
   * Inline inquiry modal across all service cards.
-  * Direct delivery formatting for `rkmvedant@gmail.com`.
+  * Direct delivery formatting for `rajeshbhagia500@gmail.com`.
   * Mobile and WhatsApp click-to-chat integration (+91 9371650121).
 * **Company Profile & Corporate Brochure (`/company-profile`):**
   * Interactive company profile and service matrix.
@@ -85,6 +85,6 @@ Run both the frontend and the Admin API server:
 
 * **Organization:** RKMIDIGILABS
 * **Practice Lead:** Principal AIGP & Enterprise GRC Practice Lead
-* **Email:** [rkmvedant@gmail.com](mailto:rkmvedant@gmail.com)
+* **Email:** [rajeshbhagia500@gmail.com](mailto:rajeshbhagia500@gmail.com)
 * **Mobile / WhatsApp:** [+91 9371650121](tel:+919371650121)
 * **Brochure:** [http://localhost:4321/company-profile](http://localhost:4321/company-profile)
