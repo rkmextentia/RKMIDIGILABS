@@ -56,7 +56,7 @@ const currentPath = Astro.url.pathname;
       </nav>
 
       <!-- Action Button & Working Social Media Links (Route to Company Profile & Brochure) -->
-      <div class="hidden sm:flex items-center gap-3">
+      <div class="hidden sm:flex items-center gap-2.5">
         <a 
           href="/company-profile#youtube" 
           class="p-2 rounded-lg text-slate-300 hover:text-red-400 hover:bg-[#1a3666] transition-colors"
@@ -83,6 +83,16 @@ const currentPath = Astro.url.pathname;
           aria-label="X Twitter Profile"
         >
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+
+        <!-- Enquire Mail CTA Button -->
+        <a 
+          href="mailto:rkmvedant@gmail.com?subject=Inquiry%20to%20RKMIDIGILABS%3A%20AI%20Governance%20%26%20GRC" 
+          class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-[#1d3d75] hover:bg-[#254d93] text-emerald-300 border border-emerald-500/40 transition-all shadow-xs"
+          title="Direct Mail Inquiry to rkmvedant@gmail.com"
+        >
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span>Enquire Mail</span>
         </a>
 
         <!-- Student Portal CTA -->
@@ -130,10 +140,17 @@ const currentPath = Astro.url.pathname;
         {link.name}
       </a>
     ))}
-    <div class="pt-3 border-t border-slate-700/60">
-      <div class="text-xs text-slate-300 mb-2 font-mono">
-        📞 +91 9371650121 • ✉️ rajeshbhagia500@gmail.com
+    <div class="pt-3 border-t border-slate-700/60 space-y-2">
+      <div class="text-xs text-slate-300 mb-1 font-mono">
+        📞 +91 9371650121 • ✉️ rkmvedant@gmail.com
       </div>
+      <a 
+        href="mailto:rkmvedant@gmail.com?subject=Inquiry%20to%20RKMIDIGILABS%3A%20AI%20Governance%20%26%20GRC" 
+        class="w-full text-center flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-bold bg-[#1d3d75] hover:bg-[#254d93] text-emerald-300 border border-emerald-500/40 transition-colors shadow-xs"
+      >
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <span>Enquire Mail (rkmvedant@gmail.com)</span>
+      </a>
       <a 
         href="/contact" 
         class="w-full text-center block py-2.5 px-4 rounded-lg font-bold bg-[#16A34A] hover:bg-[#15803D] text-white transition-colors"
