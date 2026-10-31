@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import YouTubeEmbed from '../components/YouTubeEmbed.astro';
 import PostCard from '../components/PostCard.astro';
 import ServiceCard from '../components/ServiceCard.astro';
+import SecuralSystemToolbar from '../components/SecuralSystemToolbar.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog')).filter(p => p.data.published !== false);
@@ -45,6 +46,9 @@ const recentPosts = sortedPosts.filter(p => p.id !== featuredPost?.id).slice(0, 
 
   <!-- Hero Section with black fonts, grey highlights, green buttons -->
   <Hero />
+
+  <!-- 3D Lock & Secural System Telemetry Toolbar (Vectron Quadrillion Risk Matrix) -->
+  <SecuralSystemToolbar />
 
   <!-- Featured "Dispatch of the Day" Section -->
   {featuredPost && (
