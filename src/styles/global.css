@@ -92,3 +92,134 @@
   height: auto;
   display: block;
 }
+
+/* ==========================================================================
+   UNIVERSAL CURSOR AFFORDANCE & POINTER FEEDBACK SYSTEM
+   Dynamic cursors for Mouse, Pen/Stylus, and Fine Pointers across all states
+   ========================================================================== */
+
+/* 1. Clickable Interactive Elements */
+a,
+button,
+[role="button"],
+[role="tab"],
+select,
+summary,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+.cursor-pointer,
+.clickable,
+[data-action] {
+  cursor: pointer !important;
+}
+
+/* 2. Text Input & Editable Elements */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="number"],
+textarea,
+[contenteditable="true"] {
+  cursor: text !important;
+}
+
+/* 3. Drag / Pan Affordance (Mouse & Stylus / Pen) */
+.cursor-grab,
+[draggable="true"],
+.draggable,
+.drag-stage,
+#lock-3d-stage {
+  cursor: grab !important;
+  touch-action: none;
+}
+
+/* Active Dragging / In-Flight Grab */
+.cursor-grab:active,
+.cursor-grabbing,
+[draggable="true"]:active,
+.draggable:active,
+.is-dragging,
+#lock-3d-stage:active,
+#lock-3d-stage.is-dragging {
+  cursor: grabbing !important;
+  touch-action: none;
+}
+
+/* 4. Extend & Resize Affordances (Vertical / Row) */
+.cursor-ns-resize,
+.cursor-row-resize,
+.extend-handle,
+.extend-handle-bar,
+.resize-handle-v,
+[data-resize="vertical"] {
+  cursor: ns-resize !important;
+  cursor: row-resize !important;
+  touch-action: none;
+}
+
+/* 5. Extend & Resize Affordances (Horizontal / Column) */
+.cursor-ew-resize,
+.cursor-col-resize,
+.resize-handle-h,
+[data-resize="horizontal"] {
+  cursor: ew-resize !important;
+  cursor: col-resize !important;
+  touch-action: none;
+}
+
+/* 6. Diagonal / Corner Extend (Boxes, Resizable Panels) */
+.cursor-nwse-resize,
+.resize-corner {
+  cursor: nwse-resize !important;
+}
+
+/* 7. Copy Trigger Feedback */
+.cursor-copy,
+[data-action="copy"],
+.copy-trigger {
+  cursor: copy !important;
+}
+
+/* 8. Zoom-In / Zoom-Out (Previews & Modals) */
+.cursor-zoom-in,
+.zoomable,
+img.previewable {
+  cursor: zoom-in !important;
+}
+.cursor-zoom-out,
+.zoomable.zoomed {
+  cursor: zoom-out !important;
+}
+
+/* 9. Disabled & Inactive Elements */
+:disabled,
+[disabled],
+.disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
+
+/* 10. Help & Tooltip Triggers */
+.cursor-help,
+[data-tooltip] {
+  cursor: help !important;
+}
+
+/* 11. Range Sliders (Grab / Grabbing) */
+input[type="range"] {
+  cursor: grab !important;
+}
+input[type="range"]:active {
+  cursor: grabbing !important;
+}
+
+/* 12. Textarea resize handle affordance */
+textarea {
+  resize: vertical;
+}

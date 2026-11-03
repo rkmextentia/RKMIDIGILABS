@@ -379,12 +379,28 @@ const staticPosts = staticCollection.map(p => ({
                 <span>↻ Import from Title/Summary (Manual Only)</span>
               </button>
             </div>
+            <div class="relative">
             <textarea 
               id="social-custom-copy" 
               rows="3" 
-              class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-xs font-mono text-slate-800 focus:ring-2 focus:ring-[#16A34A] focus:outline-none"
-              placeholder="Auto-generated social teaser including link to company brochure and hashtags..."
+              class="w-full px-3.5 py-2 rounded-t-lg rounded-b-none border border-slate-300 text-xs font-mono text-slate-800 focus:ring-2 focus:ring-[#16A34A] focus:outline-none min-h-[85px]"
+              placeholder="Independent social copy. Write or draft your social teaser here..."
             ></textarea>
+            <div 
+              id="extend-social-bar"
+              class="extend-handle-bar w-full py-1 px-3 bg-slate-100 hover:bg-slate-200 border border-t-0 border-slate-300 rounded-b-lg flex items-center justify-between text-[11px] font-mono text-slate-600 transition-colors select-none cursor-ns-resize"
+              title="Drag with Mouse or Pen to extend/shrink height"
+            >
+              <div class="flex items-center gap-1.5">
+                <svg class="w-3 h-3 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+                <span class="font-bold text-slate-700">Drag to Extend Height</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button type="button" id="btn-extend-social" class="px-2 py-0.5 rounded bg-white hover:bg-slate-300 border border-slate-300 text-[10px] font-bold text-slate-700 cursor-pointer">+ Extend</button>
+                <button type="button" id="btn-shrink-social" class="px-2 py-0.5 rounded bg-white hover:bg-slate-300 border border-slate-300 text-[10px] font-bold text-slate-700 cursor-pointer">- Shrink</button>
+              </div>
+            </div>
+          </div>
             <div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-500">
               <span>Includes link to <strong>Company Profile & Brochure</strong> (/company-profile)</span>
               <span id="social-char-count">0 chars</span>
@@ -467,11 +483,29 @@ const staticPosts = staticCollection.map(p => ({
             <button type="button" onclick="insertMd('\n```\n', '\n```\n')" class="px-2 py-1 rounded bg-white hover:bg-slate-200">&lt;/&gt;</button>
           </div>
 
+          <div class="relative">
           <textarea 
             id="post-body" 
             rows="14" 
-            class="w-full p-4 rounded-lg border border-slate-300 font-mono text-xs leading-relaxed text-slate-800 focus:ring-2 focus:ring-[#16A34A] focus:outline-none"
+            class="w-full p-4 rounded-t-lg rounded-b-none border border-slate-300 font-mono text-xs leading-relaxed text-slate-800 focus:ring-2 focus:ring-[#16A34A] focus:outline-none min-h-[280px]"
           ></textarea>
+          <!-- Interactive Extend Handle Bar (Dynamic Cursor: ns-resize / row-resize on mouseover / pen) -->
+          <div 
+            id="extend-body-bar"
+            class="extend-handle-bar w-full py-1.5 px-3 bg-slate-100 hover:bg-slate-200 border border-t-0 border-slate-300 rounded-b-lg flex items-center justify-between text-[11px] font-mono text-slate-600 transition-colors select-none cursor-ns-resize"
+            title="Drag with Mouse or Pen to extend/shrink height, or use quick action buttons"
+          >
+            <div class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+              <span class="font-bold text-slate-700">Drag to Extend / Resize Editor Height (Mouse & Pen)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button type="button" id="btn-extend-body" class="px-2.5 py-0.5 rounded bg-white hover:bg-slate-300 border border-slate-300 text-[10px] font-bold text-slate-700 cursor-pointer" title="Extend Height (+150px)">+ Extend</button>
+              <button type="button" id="btn-shrink-body" class="px-2.5 py-0.5 rounded bg-white hover:bg-slate-300 border border-slate-300 text-[10px] font-bold text-slate-700 cursor-pointer" title="Shrink Height (-150px)">- Shrink</button>
+              <button type="button" id="btn-full-body" class="px-2.5 py-0.5 rounded bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 text-[10px] font-bold text-emerald-800 cursor-pointer" title="Toggle Full Workspace Height">⛶ Maximize</button>
+            </div>
+          </div>
+        </div>
         </div>
 
       </div>
@@ -1274,6 +1308,81 @@ const staticPosts = staticCollection.map(p => ({
       showToast('Copied above reference text!');
     }
   });
+
+  
+  // --- Drag-to-Extend & Resize Handlers for Textareas (Mouse & Pen) ---
+  function setupExtendableTextarea(barId, textareaId, btnExtendId, btnShrinkId, btnFullId) {
+    const bar = document.getElementById(barId);
+    const textarea = document.getElementById(textareaId);
+    if (!bar || !textarea) return;
+
+    let isResizing = false;
+    let startY = 0;
+    let startHeight = 0;
+
+    bar.addEventListener('pointerdown', (e) => {
+      // Don't drag if clicking buttons inside the bar
+      if (e.target && e.target.tagName === 'BUTTON') return;
+      isResizing = true;
+      startY = e.clientY;
+      startHeight = textarea.offsetHeight;
+      try { bar.setPointerCapture(e.pointerId); } catch(err) {}
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+      bar.classList.add('bg-slate-300');
+    });
+
+    bar.addEventListener('pointermove', (e) => {
+      if (!isResizing) return;
+      const dy = e.clientY - startY;
+      const newHeight = Math.max(startHeight + dy, 120);
+      textarea.style.height = `${newHeight}px`;
+    });
+
+    const stopResize = (e) => {
+      if (!isResizing) return;
+      isResizing = false;
+      try { bar.releasePointerCapture(e.pointerId); } catch(err) {}
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      bar.classList.remove('bg-slate-300');
+    };
+
+    bar.addEventListener('pointerup', stopResize);
+    bar.addEventListener('pointercancel', stopResize);
+
+    // Quick buttons
+    const btnExtend = document.getElementById(btnExtendId);
+    btnExtend?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      textarea.style.height = `${textarea.offsetHeight + 150}px`;
+    });
+
+    const btnShrink = document.getElementById(btnShrinkId);
+    btnShrink?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      textarea.style.height = `${Math.max(textarea.offsetHeight - 150, 120)}px`;
+    });
+
+    const btnFull = btnFullId ? document.getElementById(btnFullId) : null;
+    let isMaximized = false;
+    btnFull?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!isMaximized) {
+        textarea.dataset.prevHeight = `${textarea.offsetHeight}px`;
+        textarea.style.height = '680px';
+        btnFull.textContent = '⛶ Normal';
+        isMaximized = true;
+      } else {
+        textarea.style.height = textarea.dataset.prevHeight || '280px';
+        btnFull.textContent = '⛶ Maximize';
+        isMaximized = false;
+      }
+    });
+  }
+
+  setupExtendableTextarea('extend-body-bar', 'post-body', 'btn-extend-body', 'btn-shrink-body', 'btn-full-body');
+  setupExtendableTextarea('extend-social-bar', 'social-custom-copy', 'btn-extend-social', 'btn-shrink-social');
 
   // Save changes
   if (saveBtn) {
