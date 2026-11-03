@@ -25,4 +25,4 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-Sitemap: https://rkmidigilabs.vercel.app/sitemap.xml
+Sitemap: https://rkmidigilabs.com/sitemap.xml

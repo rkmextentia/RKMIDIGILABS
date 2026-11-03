@@ -3,7 +3,7 @@ import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
   const posts = (await getCollection('blog')).filter(p => p.data.published !== false);
-  const baseUrl = context.site?.toString().replace(/\/$/, '') || 'https://rkmidigilabs.vercel.app';
+  const baseUrl = context.site?.toString().replace(/\/$/, '') || 'https://rkmidigilabs.com';
 
   const staticPages = [
     '',
