@@ -223,3 +223,45 @@ input[type="range"]:active {
 textarea {
   resize: vertical;
 }
+
+/* 13. Diagram Studio & Isolated Object Dragging (Strict Object Separation) */
+.diagram-obj {
+  cursor: grab !important;
+  touch-action: none;
+  user-select: none;
+}
+
+.diagram-obj:active,
+.diagram-obj.is-dragging {
+  cursor: grabbing !important;
+}
+
+.diagram-obj.obj-text {
+  cursor: grab !important;
+}
+
+.diagram-obj.obj-drawing {
+  cursor: grab !important;
+}
+
+.diagram-obj.obj-shape {
+  cursor: grab !important;
+}
+
+.diagram-obj.obj-arrow {
+  cursor: grab !important;
+}
+
+/* Active Pen Drawing Cursor */
+.cursor-crosshair,
+[data-tool="pen"],
+svg[style*="cursor: crosshair"] {
+  cursor: crosshair !important;
+}
+
+/* Double-click text editor input */
+#article-text-editor-input,
+#edit-text-editor-input {
+  cursor: text !important;
+}
+

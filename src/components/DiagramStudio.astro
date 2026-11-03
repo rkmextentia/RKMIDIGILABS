@@ -1,0 +1,1168 @@
+---
+// Interactive Diagram, Whiteboard & Visual Architecture Studio
+// Features independent object isolation: dragging text moves ONLY text, dragging drawings moves ONLY drawings.
+// Full Mouse & Stylus/Pen pointer support with dynamic cursor feedback.
+export interface Props {
+  idPrefix?: string;
+}
+
+const { idPrefix = 'article' } = Astro.props;
+---
+
+<div id={`${idPrefix}-diagram-studio-container`} class="space-y-3">
+  <!-- Studio Header & Action Ribbon -->
+  <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-900 text-white rounded-t-xl border border-slate-700">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">
+        Diagram & Whiteboard Studio
+      </span>
+      <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/80 text-emerald-300 border border-emerald-800/50">
+        Isolated Object Engine
+      </span>
+    </div>
+
+    <!-- Mode & Status Indicator -->
+    <div class="flex items-center gap-2 text-xs font-mono">
+      <span id={`${idPrefix}-studio-status`} class="text-slate-300 text-[11px]">
+        Select an object or choose Pen to draw
+      </span>
+    </div>
+  </div>
+
+  <!-- Interactive Toolbar: Tools, Object Creators, Colors & Styling -->
+  <div class="p-3 bg-slate-100 border-x border-slate-300 flex flex-wrap items-center justify-between gap-3 text-xs select-none">
+    
+    <!-- Primary Tool Selection (Select vs Pen) -->
+    <div class="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
+      <button 
+        type="button" 
+        id={`${idPrefix}-tool-select`}
+        class="studio-tool-btn px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors bg-[#112649] text-white cursor-pointer"
+        title="Select & Drag Objects independently (Hover: grab, Drag: grabbing)"
+        data-tool="select"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+        <span>Select & Drag</span>
+      </button>
+
+      <button 
+        type="button" 
+        id={`${idPrefix}-tool-pen`}
+        class="studio-tool-btn px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors bg-white hover:bg-slate-100 text-slate-700 cursor-pointer"
+        title="Draw freehand with Mouse or Stylus/Pen (Cursor: crosshair)"
+        data-tool="pen"
+      >
+        <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+        <span>✏️ Pen / Draw</span>
+      </button>
+    </div>
+
+    <!-- Object Creator Buttons (Add Text, Shapes, Connectors) -->
+    <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
+      <button 
+        type="button" 
+        id={`${idPrefix}-add-text-btn`}
+        class="px-2.5 py-1.5 rounded text-xs font-bold bg-slate-50 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 border border-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+        title="Add Independent Text Object (Drags separately from drawings)"
+      >
+        <span class="font-serif font-black text-emerald-600">T</span>
+        <span>+ Add Text</span>
+      </button>
+
+      <button 
+        type="button" 
+        id={`${idPrefix}-add-box-btn`}
+        class="px-2.5 py-1.5 rounded text-xs font-bold bg-slate-50 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+        title="Add Process Card / Boundary Box"
+      >
+        <span class="w-3 h-3 rounded-xs border-2 border-slate-700 inline-block"></span>
+        <span>+ Box</span>
+      </button>
+
+      <button 
+        type="button" 
+        id={`${idPrefix}-add-diamond-btn`}
+        class="px-2.5 py-1.5 rounded text-xs font-bold bg-slate-50 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+        title="Add Risk Decision Diamond"
+      >
+        <span class="w-3 h-3 border-2 border-amber-600 inline-block transform rotate-45 scale-75"></span>
+        <span>+ Decision</span>
+      </button>
+
+      <button 
+        type="button" 
+        id={`${idPrefix}-add-arrow-btn`}
+        class="px-2.5 py-1.5 rounded text-xs font-bold bg-slate-50 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+        title="Add Flow Arrow Connector"
+      >
+        <span class="text-xs font-bold text-slate-700">➔</span>
+        <span>+ Arrow</span>
+      </button>
+    </div>
+
+    <!-- Color Palette & Stroke Controls -->
+    <div class="flex items-center gap-2">
+      <!-- Color dots -->
+      <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300">
+        <button type="button" class="studio-color-btn w-5 h-5 rounded-full bg-[#10b981] ring-2 ring-emerald-500 ring-offset-1 cursor-pointer" data-color="#10b981" title="Emerald Green"></button>
+        <button type="button" class="studio-color-btn w-5 h-5 rounded-full bg-[#112649] cursor-pointer" data-color="#112649" title="Navy Blue"></button>
+        <button type="button" class="studio-color-btn w-5 h-5 rounded-full bg-[#dc2626] cursor-pointer" data-color="#dc2626" title="Red / High Risk"></button>
+        <button type="button" class="studio-color-btn w-5 h-5 rounded-full bg-[#d97706] cursor-pointer" data-color="#d97706" title="Amber / Warning"></button>
+        <button type="button" class="studio-color-btn w-5 h-5 rounded-full bg-[#7c3aed] cursor-pointer" data-color="#7c3aed" title="Purple / Cryptographic"></button>
+        <button type="button" class="studio-color-btn w-5 h-5 rounded-full bg-[#1e293b] cursor-pointer" data-color="#1e293b" title="Dark Slate"></button>
+      </div>
+
+      <!-- Stroke / Line Thickness -->
+      <select id={`${idPrefix}-stroke-size`} class="px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs font-mono cursor-pointer" title="Stroke Thickness">
+        <option value="2">Fine (2px)</option>
+        <option value="4" selected>Medium (4px)</option>
+        <option value="7">Bold (7px)</option>
+        <option value="12">Heavy (12px)</option>
+      </select>
+    </div>
+
+    <!-- Object Modifiers & Canvas Actions -->
+    <div class="flex items-center gap-1.5">
+      <button 
+        type="button" 
+        id={`${idPrefix}-delete-obj-btn`}
+        class="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-red-50 text-red-600 border border-slate-300 transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-40"
+        title="Delete Selected Object (Del / Backspace)"
+        disabled
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        <span>Delete</span>
+      </button>
+
+      <button 
+        type="button" 
+        id={`${idPrefix}-clear-canvas-btn`}
+        class="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-slate-200 text-slate-700 border border-slate-300 transition-colors cursor-pointer"
+        title="Clear all objects on canvas"
+      >
+        Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- The Interactive Canvas Surface (SVG-based for 100% Vector Precision & Layer Isolation) -->
+  <div class="relative w-full rounded-b-none border border-slate-300 bg-[#f8fafc] overflow-hidden shadow-inner">
+    <!-- Background Grid Pattern for Architectural Diagrams -->
+    <svg 
+      id={`${idPrefix}-diagram-svg`} 
+      class="w-full block bg-[#fcfdfd] cursor-default transition-all duration-75 select-none"
+      style="height: 380px; min-height: 250px; touch-action: none;"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <!-- Subtle Alignment Dot Grid -->
+        <pattern id={`${idPrefix}-dot-grid`} width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="1" fill="#cbd5e1" />
+        </pattern>
+
+        <!-- Arrow Markers -->
+        <marker id={`${idPrefix}-arrow-head`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#112649" id={`${idPrefix}-arrow-marker-path`} />
+        </marker>
+        <marker id={`${idPrefix}-arrow-head-emerald`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+        </marker>
+      </defs>
+
+      <!-- Grid Layer -->
+      <rect width="100%" height="100%" fill={`url(#${idPrefix}-dot-grid)`} pointer-events="none" />
+
+      <!-- Objects Rendering Container (All created items live here) -->
+      <g id={`${idPrefix}-objects-layer`}>
+        <!-- Dynamically rendered isolated objects -->
+      </g>
+
+      <!-- Active Drawing Stroke Layer (During Pen in-progress drag) -->
+      <path 
+        id={`${idPrefix}-active-pen-stroke`} 
+        fill="none" 
+        stroke="#10b981" 
+        stroke-width="4" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        class="pointer-events-none hidden" 
+      />
+
+      <!-- Active Selection Overlay Bounding Box (Surrounds ONLY the selected object) -->
+      <g id={`${idPrefix}-selection-overlay`} class="hidden pointer-events-none">
+        <rect 
+          id={`${idPrefix}-selection-rect`} 
+          fill="none" 
+          stroke="#10b981" 
+          stroke-width="1.5" 
+          stroke-dasharray="4,4" 
+          rx="4" 
+        />
+        <circle id={`${idPrefix}-handle-nw`} r="5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <circle id={`${idPrefix}-handle-ne`} r="5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <circle id={`${idPrefix}-handle-se`} r="5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <circle id={`${idPrefix}-handle-sw`} r="5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+      </g>
+    </svg>
+
+    <!-- Floating Quick Edit Input for Text Objects -->
+    <div id={`${idPrefix}-text-editor-popup`} class="absolute hidden z-30 p-2 bg-white rounded-lg border-2 border-emerald-500 shadow-xl flex items-center gap-2">
+      <input 
+        type="text" 
+        id={`${idPrefix}-text-editor-input`} 
+        class="px-2 py-1 text-xs border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:outline-none min-w-[200px] font-sans" 
+        placeholder="Enter text..." 
+      />
+      <button type="button" id={`${idPrefix}-text-editor-save`} class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold cursor-pointer">
+        ✓ Done
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Extend Handle Bar (Dynamic Cursor: ns-resize / row-resize on mouseover / pen) -->
+  <div 
+    id={`${idPrefix}-diagram-extend-bar`}
+    class="extend-handle-bar w-full py-1.5 px-3 bg-slate-100 hover:bg-slate-200 border border-t-0 border-slate-300 rounded-b-lg flex items-center justify-between text-[11px] font-mono text-slate-600 transition-colors select-none cursor-ns-resize"
+    title="Drag with Mouse or Pen to extend/shrink canvas workspace height, or use quick action buttons"
+  >
+    <div class="flex items-center gap-2">
+      <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+      <span class="font-bold text-slate-700">Drag to Extend / Resize Canvas Height (Mouse & Pen)</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button type="button" id={`${idPrefix}-btn-extend-canvas`} class="px-2.5 py-0.5 rounded bg-white hover:bg-slate-300 border border-slate-300 text-[10px] font-bold text-slate-700 cursor-pointer" title="Extend Height (+120px)">+ Extend</button>
+      <button type="button" id={`${idPrefix}-btn-shrink-canvas`} class="px-2.5 py-0.5 rounded bg-white hover:bg-slate-300 border border-slate-300 text-[10px] font-bold text-slate-700 cursor-pointer" title="Shrink Height (-120px)">- Shrink</button>
+      <button type="button" id={`${idPrefix}-btn-full-canvas`} class="px-2.5 py-0.5 rounded bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 text-[10px] font-bold text-emerald-800 cursor-pointer" title="Toggle Full Workspace Height">⛶ Maximize</button>
+    </div>
+  </div>
+
+  <!-- Output / Insert Actions Ribbon -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
+    <div class="text-xs text-slate-600">
+      <span class="font-bold text-slate-800">Objects Rule:</span> Text and drawing content are strictly separated. Dragging text moves <span class="text-emerald-700 font-bold underline">only the text</span>; dragging drawings moves <span class="text-emerald-700 font-bold underline">only the drawing</span>.
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button 
+        type="button" 
+        id={`${idPrefix}-download-png-btn`}
+        class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+        title="Download diagram as high-resolution PNG image"
+      >
+        <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <span>Download PNG</span>
+      </button>
+
+      <button 
+        type="button" 
+        id={`${idPrefix}-apply-to-article-btn`}
+        class="px-4 py-1.5 rounded-lg text-xs font-bold bg-[#16A34A] hover:bg-[#15803D] text-white transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+        title="Render diagram and insert directly into Cover Image and Article Body"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <span>Apply Diagram to Article</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ idPrefix }}>
+(function() {
+  // Safe container initialization
+  const svg = document.getElementById(`${idPrefix}-diagram-svg`);
+  const objectsLayer = document.getElementById(`${idPrefix}-objects-layer`);
+  const activePenStroke = document.getElementById(`${idPrefix}-active-pen-stroke`);
+  const selectionOverlay = document.getElementById(`${idPrefix}-selection-overlay`);
+  const selectionRect = document.getElementById(`${idPrefix}-selection-rect`);
+  const handleNW = document.getElementById(`${idPrefix}-handle-nw`);
+  const handleNE = document.getElementById(`${idPrefix}-handle-ne`);
+  const handleSE = document.getElementById(`${idPrefix}-handle-se`);
+  const handleSW = document.getElementById(`${idPrefix}-handle-sw`);
+  const statusLabel = document.getElementById(`${idPrefix}-studio-status`);
+  const deleteBtn = document.getElementById(`${idPrefix}-delete-obj-btn`);
+  const strokeSizeSelect = document.getElementById(`${idPrefix}-stroke-size`);
+
+  if (!svg || !objectsLayer) return;
+
+  // 1. STATE MANAGEMENT: Strictly separated object storage
+  let currentTool = 'select'; // 'select' | 'pen'
+  let currentColor = '#10b981';
+  let currentStrokeWidth = 4;
+  let selectedObjectId = null;
+
+  // Dragging state for independent objects
+  let isDraggingObject = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let objInitialX = 0;
+  let objInitialY = 0;
+  let activeDragObject = null;
+  let activeDragElement = null;
+
+  // Drawing state for pen tool
+  let isDrawing = false;
+  let currentStrokePoints = [];
+
+  // OBJECT STORE: Every object has its own unique ID, type, coordinate system and styling
+  let objects = [
+    {
+      id: 'demo-text-1',
+      type: 'text',
+      x: 40,
+      y: 45,
+      text: 'AI Governance Framework (ISO 42001)',
+      fontSize: 15,
+      fontWeight: 'bold',
+      color: '#112649',
+      bgColor: '#ecfdf5',
+      borderColor: '#10b981',
+      paddingX: 14,
+      paddingY: 8,
+      width: 290,
+      height: 36
+    },
+    {
+      id: 'demo-drawing-1',
+      type: 'drawing',
+      x: 0,
+      y: 0,
+      color: '#10b981',
+      strokeWidth: 4,
+      points: [
+        {x: 45, y: 110}, {x: 80, y: 130}, {x: 140, y: 135}, {x: 200, y: 120}, {x: 280, y: 135}
+      ]
+    },
+    {
+      id: 'demo-text-2',
+      type: 'text',
+      x: 360,
+      y: 45,
+      text: 'EU AI Act High-Risk Boundary',
+      fontSize: 14,
+      fontWeight: 'bold',
+      color: '#dc2626',
+      bgColor: '#fef2f2',
+      borderColor: '#ef4444',
+      paddingX: 14,
+      paddingY: 8,
+      width: 250,
+      height: 36
+    },
+    {
+      id: 'demo-shape-1',
+      type: 'shape',
+      shape: 'rect',
+      x: 40,
+      y: 165,
+      width: 220,
+      height: 80,
+      text: 'Annex III Model Auditing\n• Bias & Fairness Metrics\n• Continuous Logging',
+      color: '#0f172a',
+      bgColor: '#ffffff',
+      borderColor: '#cbd5e1'
+    },
+    {
+      id: 'demo-shape-2',
+      type: 'shape',
+      shape: 'diamond',
+      x: 340,
+      y: 160,
+      width: 130,
+      height: 90,
+      text: 'Fundamental\nRights OK?',
+      color: '#b45309',
+      bgColor: '#fffbeb',
+      borderColor: '#f59e0b'
+    },
+    {
+      id: 'demo-arrow-1',
+      type: 'arrow',
+      x: 0,
+      y: 0,
+      startX: 260,
+      startY: 205,
+      endX: 340,
+      endY: 205,
+      color: '#112649',
+      strokeWidth: 2.5
+    }
+  ];
+
+  // Helper: SVG point coordinate conversion
+  function getSvgCoords(e) {
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    const ctm = svg.getScreenCTM();
+    if (ctm) {
+      return pt.matrixTransform(ctm.inverse());
+    }
+    const rect = svg.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  // 2. RENDER PIPELINE: Render each object as its own isolated, selectable SVG element
+  function renderAllObjects() {
+    objectsLayer.innerHTML = '';
+
+    objects.forEach(obj => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', `diagram-obj obj-${obj.type} cursor-grab select-none`);
+      g.setAttribute('data-id', obj.id);
+      g.setAttribute('data-type', obj.type);
+      g.style.cursor = currentTool === 'select' ? 'grab' : 'crosshair';
+
+      if (obj.type === 'text') {
+        // Render isolated Text Object
+        g.setAttribute('transform', `translate(${obj.x}, ${obj.y})`);
+
+        // Background box for text
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', '0');
+        rect.setAttribute('y', '0');
+        rect.setAttribute('width', String(obj.width || 200));
+        rect.setAttribute('height', String(obj.height || 36));
+        rect.setAttribute('rx', '6');
+        rect.setAttribute('fill', obj.bgColor || '#ffffff');
+        rect.setAttribute('stroke', obj.borderColor || '#10b981');
+        rect.setAttribute('stroke-width', '1.5');
+        g.appendChild(rect);
+
+        // Text element
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', String((obj.width || 200) / 2));
+        text.setAttribute('y', String((obj.height || 36) / 2 + 5));
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', obj.color || '#112649');
+        text.setAttribute('font-size', String(obj.fontSize || 14));
+        text.setAttribute('font-weight', obj.fontWeight || 'bold');
+        text.setAttribute('font-family', 'ui-sans-serif, system-ui, sans-serif');
+        text.textContent = obj.text;
+        g.appendChild(text);
+
+      } else if (obj.type === 'drawing') {
+        // Render isolated Drawing Object (Strokes)
+        g.setAttribute('transform', `translate(${obj.x || 0}, ${obj.y || 0})`);
+
+        if (obj.points && obj.points.length > 0) {
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          let d = `M ${obj.points[0].x} ${obj.points[0].y}`;
+          for (let i = 1; i < obj.points.length; i++) {
+            d += ` L ${obj.points[i].x} ${obj.points[i].y}`;
+          }
+          path.setAttribute('d', d);
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', obj.color || '#10b981');
+          path.setAttribute('stroke-width', String(obj.strokeWidth || 4));
+          path.setAttribute('stroke-linecap', 'round');
+          path.setAttribute('stroke-linejoin', 'round');
+          g.appendChild(path);
+
+          // Transparent hit tester to make grabbing easy
+          const hitPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          hitPath.setAttribute('d', d);
+          hitPath.setAttribute('fill', 'none');
+          hitPath.setAttribute('stroke', 'transparent');
+          hitPath.setAttribute('stroke-width', String(Math.max((obj.strokeWidth || 4) + 16, 24)));
+          g.appendChild(hitPath);
+        }
+
+      } else if (obj.type === 'shape') {
+        // Render isolated Shape Object
+        g.setAttribute('transform', `translate(${obj.x}, ${obj.y})`);
+
+        if (obj.shape === 'rect') {
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', '0');
+          rect.setAttribute('y', '0');
+          rect.setAttribute('width', String(obj.width));
+          rect.setAttribute('height', String(obj.height));
+          rect.setAttribute('rx', '8');
+          rect.setAttribute('fill', obj.bgColor || '#ffffff');
+          rect.setAttribute('stroke', obj.borderColor || '#cbd5e1');
+          rect.setAttribute('stroke-width', '2');
+          rect.setAttribute('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.06))');
+          g.appendChild(rect);
+
+          // Lines of text
+          const lines = (obj.text || '').split('\n');
+          lines.forEach((line, idx) => {
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', '14');
+            text.setAttribute('y', String(22 + idx * 18));
+            text.setAttribute('fill', obj.color || '#0f172a');
+            text.setAttribute('font-size', idx === 0 ? '13' : '11');
+            text.setAttribute('font-weight', idx === 0 ? 'bold' : 'normal');
+            text.setAttribute('font-family', 'ui-sans-serif, system-ui, sans-serif');
+            text.textContent = line;
+            g.appendChild(text);
+          });
+        } else if (obj.shape === 'diamond') {
+          const w = obj.width;
+          const h = obj.height;
+          const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          poly.setAttribute('points', `${w/2},0 ${w},${h/2} ${w/2},${h} 0,${h/2}`);
+          poly.setAttribute('fill', obj.bgColor || '#fffbeb');
+          poly.setAttribute('stroke', obj.borderColor || '#f59e0b');
+          poly.setAttribute('stroke-width', '2');
+          g.appendChild(poly);
+
+          const lines = (obj.text || '').split('\n');
+          lines.forEach((line, idx) => {
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', String(w / 2));
+            text.setAttribute('y', String(h / 2 - 2 + idx * 16));
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('fill', obj.color || '#b45309');
+            text.setAttribute('font-size', '12');
+            text.setAttribute('font-weight', 'bold');
+            text.setAttribute('font-family', 'ui-sans-serif, system-ui, sans-serif');
+            text.textContent = line;
+            g.appendChild(text);
+          });
+        }
+
+      } else if (obj.type === 'arrow') {
+        // Render isolated Arrow Connector
+        g.setAttribute('transform', `translate(${obj.x || 0}, ${obj.y || 0})`);
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${obj.startX} ${obj.startY} L ${obj.endX} ${obj.endY}`;
+        path.setAttribute('d', d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', obj.color || '#112649');
+        path.setAttribute('stroke-width', String(obj.strokeWidth || 2.5));
+        path.setAttribute('marker-end', `url(#${idPrefix}-arrow-head)`);
+        g.appendChild(path);
+
+        // Fat hit tester
+        const hitPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        hitPath.setAttribute('d', d);
+        hitPath.setAttribute('fill', 'none');
+        hitPath.setAttribute('stroke', 'transparent');
+        hitPath.setAttribute('stroke-width', '20');
+        g.appendChild(hitPath);
+      }
+
+      objectsLayer.appendChild(g);
+    });
+
+    updateSelectionOverlay();
+  }
+
+  // 3. SELECTION OVERLAY: Shows visual bounding box strictly around the selected object
+  function getObjectBoundingBox(obj) {
+    if (!obj) return null;
+    if (obj.type === 'text' || obj.type === 'shape') {
+      return {
+        x: obj.x,
+        y: obj.y,
+        width: obj.width || 180,
+        height: obj.height || 40
+      };
+    } else if (obj.type === 'drawing') {
+      if (!obj.points || obj.points.length === 0) return null;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      obj.points.forEach(p => {
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      });
+      const pad = (obj.strokeWidth || 4) + 6;
+      return {
+        x: (obj.x || 0) + minX - pad,
+        y: (obj.y || 0) + minY - pad,
+        width: Math.max((maxX - minX) + pad * 2, 20),
+        height: Math.max((maxY - minY) + pad * 2, 20)
+      };
+    } else if (obj.type === 'arrow') {
+      const minX = Math.min(obj.startX, obj.endX) - 8;
+      const minY = Math.min(obj.startY, obj.endY) - 8;
+      const maxX = Math.max(obj.startX, obj.endX) + 8;
+      const maxY = Math.max(obj.startY, obj.endY) + 8;
+      return { 
+        x: (obj.x || 0) + minX, 
+        y: (obj.y || 0) + minY, 
+        width: Math.max(maxX - minX, 16), 
+        height: Math.max(maxY - minY, 16) 
+      };
+    }
+    return null;
+  }
+
+  function updateSelectionOverlay() {
+    if (!selectedObjectId) {
+      selectionOverlay.classList.add('hidden');
+      if (deleteBtn) deleteBtn.setAttribute('disabled', 'true');
+      if (statusLabel) {
+        statusLabel.textContent = currentTool === 'pen' ? 'PEN MODE: Draw freely with mouse or stylus' : 'Select an object to drag independently';
+      }
+      return;
+    }
+
+    const obj = objects.find(o => o.id === selectedObjectId);
+    if (!obj) {
+      selectionOverlay.classList.add('hidden');
+      return;
+    }
+
+    const bbox = getObjectBoundingBox(obj);
+    if (!bbox) {
+      selectionOverlay.classList.add('hidden');
+      return;
+    }
+
+    selectionRect.setAttribute('x', String(bbox.x - 3));
+    selectionRect.setAttribute('y', String(bbox.y - 3));
+    selectionRect.setAttribute('width', String(bbox.width + 6));
+    selectionRect.setAttribute('height', String(bbox.height + 6));
+
+    // Corner handle circles
+    handleNW.setAttribute('cx', String(bbox.x - 3));
+    handleNW.setAttribute('cy', String(bbox.y - 3));
+    handleNE.setAttribute('cx', String(bbox.x + bbox.width + 3));
+    handleNE.setAttribute('cy', String(bbox.y - 3));
+    handleSE.setAttribute('cx', String(bbox.x + bbox.width + 3));
+    handleSE.setAttribute('cy', String(bbox.y + bbox.height + 3));
+    handleSW.setAttribute('cx', String(bbox.x - 3));
+    handleSW.setAttribute('cy', String(bbox.y + bbox.height + 3));
+
+    selectionOverlay.classList.remove('hidden');
+    if (deleteBtn) deleteBtn.removeAttribute('disabled');
+
+    if (statusLabel) {
+      const typeLabel = obj.type.toUpperCase();
+      statusLabel.textContent = `SELECTED [${typeLabel}]: Drag with mouse or pen (moves only this object)`;
+    }
+  }
+
+  // 4. CORE ENGINE: STRICTLY SEPARATED OBJECT DRAGGING
+  // "If I drag the text then only the text should get dragged.
+  //  IF I have drawn something and drag the drawing content then the drawing content only should get dragged."
+  
+  svg.addEventListener('pointerdown', (e) => {
+    // Only primary button or stylus
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+    const coords = getSvgCoords(e);
+
+    // MODE 1: PEN DRAWING MODE
+    if (currentTool === 'pen') {
+      isDrawing = true;
+      currentStrokePoints = [{ x: coords.x, y: coords.y }];
+      activePenStroke.setAttribute('d', `M ${coords.x} ${coords.y}`);
+      activePenStroke.setAttribute('stroke', currentColor);
+      activePenStroke.setAttribute('stroke-width', String(currentStrokeWidth));
+      activePenStroke.classList.remove('hidden');
+      try { svg.setPointerCapture(e.pointerId); } catch(err) {}
+      return;
+    }
+
+    // MODE 2: SELECT & DRAG INDEPENDENT OBJECT MODE
+    const targetObjEl = e.target.closest('.diagram-obj');
+
+    if (targetObjEl) {
+      e.stopPropagation();
+      const objId = targetObjEl.getAttribute('data-id');
+      const obj = objects.find(o => o.id === objId);
+
+      if (obj) {
+        // Select ONLY this object
+        selectedObjectId = obj.id;
+        activeDragObject = obj;
+        activeDragElement = targetObjEl;
+        isDraggingObject = true;
+
+        dragStartX = coords.x;
+        dragStartY = coords.y;
+        objInitialX = obj.x || 0;
+        objInitialY = obj.y || 0;
+
+        // Dynamic cursor: grabbing closed hand
+        targetObjEl.style.cursor = 'grabbing';
+        document.body.style.cursor = 'grabbing';
+        document.body.style.userSelect = 'none';
+
+        try { targetObjEl.setPointerCapture(e.pointerId); } catch(err) {}
+        updateSelectionOverlay();
+      }
+    } else {
+      // Clicked on empty canvas space: deselect
+      selectedObjectId = null;
+      updateSelectionOverlay();
+    }
+  });
+
+  svg.addEventListener('pointermove', (e) => {
+    const coords = getSvgCoords(e);
+
+    // SUB-FLOW A: Live Pen Drawing
+    if (isDrawing && currentTool === 'pen') {
+      currentStrokePoints.push({ x: coords.x, y: coords.y });
+      let d = `M ${currentStrokePoints[0].x} ${currentStrokePoints[0].y}`;
+      for (let i = 1; i < currentStrokePoints.length; i++) {
+        d += ` L ${currentStrokePoints[i].x} ${currentStrokePoints[i].y}`;
+      }
+      activePenStroke.setAttribute('d', d);
+      return;
+    }
+
+    // SUB-FLOW B: Dragging the Selected Object Independently
+    if (isDraggingObject && activeDragObject && activeDragElement) {
+      const dx = coords.x - dragStartX;
+      const dy = coords.y - dragStartY;
+
+      // UPDATE ONLY THIS SPECIFIC OBJECT'S COORDINATES!
+      activeDragObject.x = Math.round(objInitialX + dx);
+      activeDragObject.y = Math.round(objInitialY + dy);
+      activeDragElement.setAttribute('transform', `translate(${activeDragObject.x}, ${activeDragObject.y})`);
+
+      // SIBLING OBJECTS ARE 100% UNTOUCHED!
+      updateSelectionOverlay();
+    }
+  });
+
+  const stopPointerAction = (e) => {
+    // End Pen Drawing
+    if (isDrawing && currentTool === 'pen') {
+      isDrawing = false;
+      activePenStroke.classList.add('hidden');
+      try { svg.releasePointerCapture(e.pointerId); } catch(err) {}
+
+      if (currentStrokePoints.length > 1) {
+        // CREATE ONE INDEPENDENT DRAWING OBJECT
+        const newDrawingObj = {
+          id: `draw-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          type: 'drawing',
+          x: 0,
+          y: 0,
+          color: currentColor,
+          strokeWidth: currentStrokeWidth,
+          points: [...currentStrokePoints]
+        };
+        objects.push(newDrawingObj);
+        selectedObjectId = newDrawingObj.id;
+        renderAllObjects();
+
+        if (statusLabel) {
+          statusLabel.textContent = 'Drawn stroke created as independent object! Drag it or draw another.';
+        }
+      }
+      currentStrokePoints = [];
+      return;
+    }
+
+    // End Object Dragging
+    if (isDraggingObject) {
+      isDraggingObject = false;
+      if (activeDragElement) {
+        activeDragElement.style.cursor = 'grab';
+        try { activeDragElement.releasePointerCapture(e.pointerId); } catch(err) {}
+      }
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      activeDragObject = null;
+      activeDragElement = null;
+      renderAllObjects();
+    }
+  };
+
+  svg.addEventListener('pointerup', stopPointerAction);
+  svg.addEventListener('pointercancel', stopPointerAction);
+
+  // 5. DOUBLE CLICK TO EDIT TEXT IN PLACE
+  const textPopup = document.getElementById(`${idPrefix}-text-editor-popup`);
+  const textInput = document.getElementById(`${idPrefix}-text-editor-input`);
+  const textSaveBtn = document.getElementById(`${idPrefix}-text-editor-save`);
+  let editingTextObj = null;
+
+  svg.addEventListener('dblclick', (e) => {
+    const targetObjEl = e.target.closest('.diagram-obj');
+    if (!targetObjEl) return;
+    const objId = targetObjEl.getAttribute('data-id');
+    const obj = objects.find(o => o.id === objId);
+    if (!obj || (obj.type !== 'text' && obj.type !== 'shape')) return;
+
+    editingTextObj = obj;
+    textInput.value = obj.text || '';
+    
+    // Position popup near object
+    const rect = svg.getBoundingClientRect();
+    textPopup.style.left = `${Math.min(obj.x + 20, rect.width - 240)}px`;
+    textPopup.style.top = `${Math.max(obj.y - 10, 20)}px`;
+    textPopup.classList.remove('hidden');
+    textInput.focus();
+    textInput.select();
+  });
+
+  const saveTextEdit = () => {
+    if (editingTextObj) {
+      editingTextObj.text = textInput.value.trim() || 'Label';
+      // Dynamically auto-size text container width if needed
+      if (editingTextObj.type === 'text') {
+        editingTextObj.width = Math.max(editingTextObj.text.length * 9 + 30, 140);
+      }
+      editingTextObj = null;
+      textPopup.classList.add('hidden');
+      renderAllObjects();
+    }
+  };
+
+  if (textSaveBtn) textSaveBtn.addEventListener('click', saveTextEdit);
+  if (textInput) {
+    textInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveTextEdit();
+      if (e.key === 'Escape') {
+        editingTextObj = null;
+        textPopup.classList.add('hidden');
+      }
+    });
+  }
+
+  // 6. OBJECT CREATION BUTTONS (+ Add Text, + Add Box, + Add Diamond, + Add Arrow)
+  const addTextBtn = document.getElementById(`${idPrefix}-add-text-btn`);
+  if (addTextBtn) {
+    addTextBtn.addEventListener('click', () => {
+      const newText = {
+        id: `text-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        type: 'text',
+        x: Math.floor(Math.random() * 120) + 60,
+        y: Math.floor(Math.random() * 100) + 80,
+        text: 'GRC Risk Criterion',
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: currentColor,
+        bgColor: '#ffffff',
+        borderColor: currentColor,
+        width: 170,
+        height: 36
+      };
+      objects.push(newText);
+      selectedObjectId = newText.id;
+      setTool('select');
+      renderAllObjects();
+    });
+  }
+
+  const addBoxBtn = document.getElementById(`${idPrefix}-add-box-btn`);
+  if (addBoxBtn) {
+    addBoxBtn.addEventListener('click', () => {
+      const newBox = {
+        id: `box-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        type: 'shape',
+        shape: 'rect',
+        x: Math.floor(Math.random() * 100) + 80,
+        y: Math.floor(Math.random() * 80) + 120,
+        width: 200,
+        height: 70,
+        text: 'New Control Boundary\n• Independent Verification',
+        color: '#0f172a',
+        bgColor: '#ffffff',
+        borderColor: currentColor
+      };
+      objects.push(newBox);
+      selectedObjectId = newBox.id;
+      setTool('select');
+      renderAllObjects();
+    });
+  }
+
+  const addDiamondBtn = document.getElementById(`${idPrefix}-add-diamond-btn`);
+  if (addDiamondBtn) {
+    addDiamondBtn.addEventListener('click', () => {
+      const newDiamond = {
+        id: `diamond-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        type: 'shape',
+        shape: 'diamond',
+        x: Math.floor(Math.random() * 120) + 160,
+        y: Math.floor(Math.random() * 80) + 120,
+        width: 120,
+        height: 80,
+        text: 'Risk Gate?',
+        color: '#b45309',
+        bgColor: '#fffbeb',
+        borderColor: '#f59e0b'
+      };
+      objects.push(newDiamond);
+      selectedObjectId = newDiamond.id;
+      setTool('select');
+      renderAllObjects();
+    });
+  }
+
+  const addArrowBtn = document.getElementById(`${idPrefix}-add-arrow-btn`);
+  if (addArrowBtn) {
+    addArrowBtn.addEventListener('click', () => {
+      const newArrow = {
+        id: `arrow-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        type: 'arrow',
+        x: 0,
+        y: 0,
+        startX: 100,
+        startY: 180,
+        endX: 220,
+        endY: 180,
+        color: currentColor,
+        strokeWidth: currentStrokeWidth
+      };
+      objects.push(newArrow);
+      selectedObjectId = newArrow.id;
+      setTool('select');
+      renderAllObjects();
+    });
+  }
+
+  // 7. TOOL SWITCHING (Select vs Pen)
+  const toolSelectBtn = document.getElementById(`${idPrefix}-tool-select`);
+  const toolPenBtn = document.getElementById(`${idPrefix}-tool-pen`);
+
+  function setTool(tool) {
+    currentTool = tool;
+    if (tool === 'select') {
+      toolSelectBtn.className = 'studio-tool-btn px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors bg-[#112649] text-white cursor-pointer';
+      toolPenBtn.className = 'studio-tool-btn px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors bg-white hover:bg-slate-100 text-slate-700 cursor-pointer';
+      svg.style.cursor = 'default';
+      renderAllObjects();
+      if (statusLabel) statusLabel.textContent = 'Select & Drag Mode: Hover over text or drawings to drag them independently.';
+    } else if (tool === 'pen') {
+      toolSelectBtn.className = 'studio-tool-btn px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors bg-white hover:bg-slate-100 text-slate-700 cursor-pointer';
+      toolPenBtn.className = 'studio-tool-btn px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors bg-emerald-600 text-white cursor-pointer';
+      svg.style.cursor = 'crosshair';
+      selectedObjectId = null;
+      updateSelectionOverlay();
+      if (statusLabel) statusLabel.textContent = 'Pen Drawing Mode: Press & draw strokes with mouse or stylus. Each stroke is an independent object.';
+    }
+  }
+
+  if (toolSelectBtn) toolSelectBtn.addEventListener('click', () => setTool('select'));
+  if (toolPenBtn) toolPenBtn.addEventListener('click', () => setTool('pen'));
+
+  // Color picker buttons
+  const colorBtns = document.querySelectorAll('.studio-color-btn');
+  colorBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentColor = btn.getAttribute('data-color') || '#10b981';
+      colorBtns.forEach(b => b.classList.remove('ring-2', 'ring-emerald-500', 'ring-offset-1'));
+      btn.classList.add('ring-2', 'ring-emerald-500', 'ring-offset-1');
+      if (selectedObjectId) {
+        const obj = objects.find(o => o.id === selectedObjectId);
+        if (obj) {
+          if (obj.type === 'text') { obj.borderColor = currentColor; obj.color = currentColor; }
+          else if (obj.type === 'drawing') { obj.color = currentColor; }
+          else if (obj.type === 'shape') { obj.borderColor = currentColor; }
+          else if (obj.type === 'arrow') { obj.color = currentColor; }
+          renderAllObjects();
+        }
+      }
+    });
+  });
+
+  // Stroke size
+  if (strokeSizeSelect) {
+    strokeSizeSelect.addEventListener('change', () => {
+      currentStrokeWidth = parseFloat(strokeSizeSelect.value) || 4;
+      if (selectedObjectId) {
+        const obj = objects.find(o => o.id === selectedObjectId);
+        if (obj && (obj.type === 'drawing' || obj.type === 'arrow')) {
+          obj.strokeWidth = currentStrokeWidth;
+          renderAllObjects();
+        }
+      }
+    });
+  }
+
+  // Delete Selected Object
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', () => {
+      if (selectedObjectId) {
+        objects = objects.filter(o => o.id !== selectedObjectId);
+        selectedObjectId = null;
+        renderAllObjects();
+      }
+    });
+  }
+
+  // Clear Canvas
+  const clearBtn = document.getElementById(`${idPrefix}-clear-canvas-btn`);
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Clear all objects from the whiteboard?')) {
+        objects = [];
+        selectedObjectId = null;
+        renderAllObjects();
+      }
+    });
+  }
+
+  // Keyboard shortcut: Delete or Backspace removes selected object
+  window.addEventListener('keydown', (e) => {
+    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedObjectId && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      objects = objects.filter(o => o.id !== selectedObjectId);
+      selectedObjectId = null;
+      renderAllObjects();
+    }
+  });
+
+  // 8. EXTEND / RESIZE CANVAS HEIGHT (Mouse & Stylus Drag)
+  const extendBar = document.getElementById(`${idPrefix}-diagram-extend-bar`);
+  const btnExtend = document.getElementById(`${idPrefix}-btn-extend-canvas`);
+  const btnShrink = document.getElementById(`${idPrefix}-btn-shrink-canvas`);
+  const btnFull = document.getElementById(`${idPrefix}-btn-full-canvas`);
+
+  if (extendBar && svg) {
+    let isResizingCanvas = false;
+    let startY = 0;
+    let initialH = 380;
+
+    extendBar.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      isResizingCanvas = true;
+      startY = e.clientY;
+      initialH = svg.offsetHeight;
+      try { extendBar.setPointerCapture(e.pointerId); } catch(err) {}
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+      extendBar.classList.add('bg-slate-300');
+    });
+
+    extendBar.addEventListener('pointermove', (e) => {
+      if (!isResizingCanvas) return;
+      const dy = e.clientY - startY;
+      const newHeight = Math.max(initialH + dy, 240);
+      svg.style.height = `${newHeight}px`;
+    });
+
+    const stopResizeCanvas = (e) => {
+      if (!isResizingCanvas) return;
+      isResizingCanvas = false;
+      try { extendBar.releasePointerCapture(e.pointerId); } catch(err) {}
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      extendBar.classList.remove('bg-slate-300');
+    };
+
+    extendBar.addEventListener('pointerup', stopResizeCanvas);
+    extendBar.addEventListener('pointercancel', stopResizeCanvas);
+
+    btnExtend?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      svg.style.height = `${svg.offsetHeight + 120}px`;
+    });
+
+    btnShrink?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      svg.style.height = `${Math.max(svg.offsetHeight - 120, 240)}px`;
+    });
+
+    let isMax = false;
+    btnFull?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!isMax) {
+        svg.dataset.prevH = `${svg.offsetHeight}px`;
+        svg.style.height = '640px';
+        btnFull.textContent = '⛶ Normal';
+        isMax = true;
+      } else {
+        svg.style.height = svg.dataset.prevH || '380px';
+        btnFull.textContent = '⛶ Maximize';
+        isMax = false;
+      }
+    });
+  }
+
+  // 9. HIGH-RESOLUTION PNG CONVERSION & ARTICLE INSERTION
+  function renderSvgToPngDataUrl(callback) {
+    // Hide selection overlay before export
+    selectionOverlay.classList.add('hidden');
+
+    const svgWidth = svg.clientWidth || 800;
+    const svgHeight = svg.clientHeight || 400;
+
+    // Clone SVG for clean offline rendering
+    const clone = svg.cloneNode(true);
+    clone.setAttribute('width', String(svgWidth));
+    clone.setAttribute('height', String(svgHeight));
+
+    // Ensure inline style
+    const xml = new XMLSerializer().serializeToString(clone);
+    const svgBlob = new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
+    const URL = window.URL || window.webkitURL || window;
+    const blobURL = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      canvas.width = svgWidth * 2; // 2x DPI for crisp high-resolution cards
+      canvas.height = svgHeight * 2;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.scale(2, 2);
+        // Clean white background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, svgWidth, svgHeight);
+        ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+        const dataUrl = canvas.toDataURL('image/png', 0.92);
+        URL.revokeObjectURL(blobURL);
+        callback(dataUrl);
+      }
+    };
+    img.src = blobURL;
+  }
+
+  // Apply to Article Button
+  const applyBtn = document.getElementById(`${idPrefix}-apply-to-article-btn`);
+  if (applyBtn) {
+    applyBtn.addEventListener('click', () => {
+      applyBtn.setAttribute('disabled', 'true');
+      applyBtn.innerHTML = `<span>Rendering High-Res Diagram...</span>`;
+
+      renderSvgToPngDataUrl((dataUrl) => {
+        // 1. Assign to cover image input & thumbnail
+        const postImage = document.getElementById('post-image');
+        const previewBox = document.getElementById('image-preview-box');
+        const previewThumb = document.getElementById('image-preview-thumb');
+        const previewName = document.getElementById('image-preview-name');
+        const previewUrl = document.getElementById('image-preview-url');
+
+        if (postImage) postImage.value = dataUrl;
+        if (previewThumb) previewThumb.src = dataUrl;
+        if (previewName) previewName.textContent = 'grc-architecture-diagram.png';
+        if (previewUrl) previewUrl.textContent = 'Interactive Whiteboard Render (Base64)';
+        if (previewBox) previewBox.classList.remove('hidden');
+
+        // 2. Append markdown diagram image into post body
+        const postBody = document.getElementById('post-body');
+        if (postBody) {
+          const diagramMarkdown = `\n\n### Architectural Diagram & Governance Control Flow\n\n![GRC Governance Architecture Diagram](${dataUrl})\n\n`;
+          postBody.value += diagramMarkdown;
+          postBody.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        applyBtn.removeAttribute('disabled');
+        applyBtn.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>✓ Applied to Article!</span>`;
+        setTimeout(() => {
+          applyBtn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Apply Diagram to Article</span>`;
+        }, 3000);
+      });
+    });
+  }
+
+  // Download PNG Button
+  const downloadBtn = document.getElementById(`${idPrefix}-download-png-btn`);
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+      renderSvgToPngDataUrl((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `rkmidigilabs-diagram-${Date.now()}.png`;
+        link.href = dataUrl;
+        link.click();
+      });
+    });
+  }
+
+  // Initial render
+  renderAllObjects();
+})();
+</script>
