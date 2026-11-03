@@ -27,8 +27,8 @@ const siteTitle = `${title} | RKMIDIGILABS — AI Governance & Enterprise GRC Pr
 const ytInfo = youtubeUrl ? getYouTubeInfo(youtubeUrl) : null;
 const resolvedImage = ytInfo ? ytInfo.thumbnailMaxRes : new URL(image, Astro.site || 'https://rkmidigilabs.vercel.app').href;
 
-// Keywords generation
-const baseKeywords = "AI Governance, AIGP, Enterprise GRC, EU AI Act, NIST AI RMF, ISO 42001, ISO 27001, SOC 2, AI Safety, Corporate Training, RKMIDIGILABS";
+// Expanded high-authority SEO keywords
+const baseKeywords = "AI Governance, AIGP, Enterprise GRC, EU AI Act, Annex III High-Risk AI, Fundamental Rights Impact Assessment, FRIA, NIST AI RMF 1.0, ISO/IEC 42001, AIMS, ISO 27001, SOC 2 Type II, AI Red-Teaming, Prompt Injection Defense, C2PA Watermarking, Third-Party Risk Management, TPRM, Corporate AI Training, RKMIDIGILABS";
 const keywordsString = tags && tags.length > 0 ? `${tags.join(', ')}, ${baseKeywords}` : baseKeywords;
 
 // JSON-LD Structured Data
@@ -40,7 +40,7 @@ const jsonLdOrg = {
   "description": "Executive AI Governance, Enterprise GRC Advisory, and Corporate Training by RKMIDIGILABS.",
   "url": new URL('/', Astro.site || 'https://rkmidigilabs.vercel.app').href,
   "logo": new URL('/images/rkmidigilabs-logo.jpg', Astro.site || 'https://rkmidigilabs.vercel.app').href,
-  "email": "rajeshbhagia500@gmail.com",
+  "email": "rkmvedant@gmail.com",
   "telephone": "+919371650121",
   "address": {
     "@type": "PostalAddress",
@@ -60,7 +60,9 @@ const jsonLdOrg = {
     "EU AI Act High-Risk Conformity",
     "Enterprise GRC Advisory",
     "ISO/IEC 42001 (AIMS) Readiness",
-    "Corporate AI Safety Training"
+    "Corporate AI Safety Training",
+    "Specialised AI Red-Teaming",
+    "IAPP AIGP Certification Training"
   ]
 };
 

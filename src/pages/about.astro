@@ -3,64 +3,150 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout 
-  title="About RKMIDIGILABS"
-  description="About RKMIDIGILABS — AI Governance & Enterprise GRC advisory practice, corporate training, and daily video media hub."
+  title="About RKMIDIGILABS — Enterprise AI Governance & GRC Practice"
+  description="Learn about RKMIDIGILABS, our mission, leadership, and multi-disciplinary methodology for AI Governance, ISO/IEC 42001, EU AI Act conformity, and corporate workforce enablement."
 >
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-    
-    <div class="space-y-4 mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-slate-100 border border-slate-300 text-xs font-mono font-bold uppercase text-slate-700">
-        About the Organization
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-[#0b1a33] via-[#112649] to-[#071326] text-white py-16 lg:py-24 border-b border-[#1d3d75] overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(16,185,129,0.12),transparent_60%)] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold tracking-wider uppercase mb-4">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Leadership & Practice Profile
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight text-white">
+          Pioneering <span class="text-emerald-400">Defensible AI Governance</span> & Enterprise Cyber Assurance
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+          Bridging the chasm between probabilistic artificial intelligence, machine learning engineering, and boardroom regulatory accountability.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-4">
+          <a 
+            href="/company-profile" 
+            class="px-6 py-3.5 rounded-xl font-bold text-sm bg-[#16A34A] hover:bg-[#15803D] text-white shadow-md transition-all flex items-center gap-2"
+          >
+            <span>View Full Company Profile & Deck</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+          <a 
+            href="/courses" 
+            class="px-6 py-3.5 rounded-xl font-bold text-sm bg-[#1a3869] hover:bg-[#254d93] text-emerald-300 border border-emerald-500/30 transition-all flex items-center gap-2"
+          >
+            <span>Explore Academy & Courses</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </a>
+        </div>
       </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-black tracking-tight leading-tight">
-        RKMIDIGILABS: AI Governance & Enterprise GRC
-      </h1>
-      <p class="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
-        Bridging the gap between software engineering, data science, and boardroom regulatory compliance.
-      </p>
     </div>
+  </section>
 
-    <div class="space-y-6 text-slate-800 text-sm sm:text-base leading-relaxed border-t border-slate-200 pt-8 font-normal">
-      <p>
-        <strong>RKMIDIGILABS</strong> was founded to address the unique compliance, safety, and risk challenges introduced by Generative AI, machine learning systems, and foundation models.
-      </p>
+  <!-- Organization Values & Metrics -->
+  <section class="bg-slate-50 border-b border-slate-200 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div class="text-3xl font-black text-black font-mono">100%</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-600 mt-1">Audit Pass Guarantee</div>
+        </div>
+        <div class="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div class="text-3xl font-black text-emerald-700 font-mono">500+</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-600 mt-1">Specialists & Leaders Trained</div>
+        </div>
+        <div class="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div class="text-3xl font-black text-[#112649] font-mono">15+ Yrs</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-600 mt-1">Combined GRC Leadership</div>
+        </div>
+        <div class="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div class="text-3xl font-black text-emerald-700 font-mono">Global</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-600 mt-1">US, EU, UK & APAC Reach</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Narrative & Mission -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
-      <p>
-        While traditional GRC operated on deterministic software systems with rigid checklists, modern AI introduces probabilistic risks—such as hallucinations, bias, model drift, and prompt injections. Major regulatory frameworks—including the European Union's <strong>EU AI Act</strong>, the U.S. <strong>NIST AI RMF</strong>, and international <strong>ISO/IEC 42001</strong> standards—now impose legal obligations on model deployers and providers.
-      </p>
-
-      <div class="p-6 rounded-xl bg-slate-50 border border-slate-300 my-8">
-        <h3 class="text-lg font-black text-black mb-2">Our Mission</h3>
-        <p class="text-sm text-slate-700 leading-relaxed font-normal">
-          To provide pragmatic, technical, and audit-ready guidance that allows enterprises to innovate boldly with artificial intelligence while establishing ironclad safety and compliance safeguards.
+      <div>
+        <h2 class="text-xs font-bold uppercase tracking-widest text-[#16A34A] mb-2">Our Origins & Purpose</h2>
+        <h3 class="text-2xl sm:text-3xl font-black text-black tracking-tight">
+          Why Traditional GRC Fails in the Era of Probabilistic AI
+        </h3>
+        <p class="mt-4 text-slate-700 text-sm sm:text-base leading-relaxed">
+          Traditional Governance, Risk, and Compliance (GRC) was engineered for deterministic systems—relational databases, fixed rules, and perimeter firewalls. When software behaved predictably, compliance was a matter of verifying static configurations and check-boxes.
+        </p>
+        <p class="mt-3 text-slate-700 text-sm sm:text-base leading-relaxed">
+          Generative AI, large language models (LLMs), and autonomous agent networks represent a paradigm shift. They are probabilistic, dynamic, and opaque. Hallucination, adversarial prompt injection, systemic demographic bias, and training data copyright infringement cannot be solved with legacy IT policies.
+        </p>
+        <p class="mt-3 text-slate-700 text-sm sm:text-base leading-relaxed font-semibold text-black">
+          RKMIDIGILABS was created to deliver technical, audit-ready governance engineering that satisfies stringent international standards while keeping enterprise innovation fast and unencumbered.
         </p>
       </div>
 
-      <h2 class="text-xl sm:text-2xl font-black text-black tracking-tight pt-4">
-        Company Contact Information
-      </h2>
-      <div class="p-5 rounded-xl bg-slate-100 border border-slate-300 space-y-2 font-mono text-xs sm:text-sm text-slate-800">
-        <div><strong class="text-black">Organization:</strong> RKMIDIGILABS</div>
-        <div><strong class="text-black">Email:</strong> <a href="mailto:rkmvedant@gmail.com" class="text-[#16A34A] hover:underline font-bold">rkmvedant@gmail.com</a></div>
-        <div><strong class="text-black">Mobile:</strong> <a href="tel:+919371650121" class="text-[#16A34A] hover:underline font-bold">+91 9371650121</a></div>
+      <!-- Core Practice Pillars -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg mb-3">
+            01
+          </div>
+          <h4 class="text-base font-black text-black">Technical Rigor</h4>
+          <p class="mt-2 text-xs text-slate-600 leading-relaxed">
+            We don't merely read regulations; we inspect model weights, engineer guardrails, conduct automated red-teaming, and benchmark Equalized Odds disparity metrics.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-lg mb-3">
+            02
+          </div>
+          <h4 class="text-base font-black text-black">Boardroom Defensibility</h4>
+          <p class="mt-2 text-xs text-slate-600 leading-relaxed">
+            Every deliverable—from Fundamental Rights Impact Assessments (FRIA) to AIMS manuals—is authored to withstand scrutiny from European Notified Bodies, the SEC, and independent auditors.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-lg mb-3">
+            03
+          </div>
+          <h4 class="text-base font-black text-black">Workforce Empowerment</h4>
+          <p class="mt-2 text-xs text-slate-600 leading-relaxed">
+            Through our Academy, we train cross-functional engineering, compliance, and executive cohorts, providing accredited continuing professional education (CPE).
+          </p>
+        </div>
       </div>
 
-      <div class="pt-8 border-t border-slate-200 flex flex-wrap items-center gap-4">
-        <a 
-          href="/contact" 
-          class="px-6 py-3 rounded-lg font-bold text-sm bg-[#16A34A] hover:bg-[#15803D] text-white transition-colors shadow-sm"
-        >
-          Contact RKMIDIGILABS
-        </a>
-        <a 
-          href="/blog" 
-          class="px-6 py-3 rounded-lg font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-colors shadow-sm"
-        >
-          Browse Blog & Articles
-        </a>
+      <!-- Official Verified Contact Card -->
+      <div class="p-6 sm:p-8 rounded-2xl bg-slate-50 border-2 border-slate-200">
+        <h3 class="text-lg font-black text-black mb-4">Official Organization Disclosures</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs text-slate-700">
+          <div><strong class="text-black">Practice:</strong> RKMIDIGILABS</div>
+          <div><strong class="text-black">Focus:</strong> AI Governance, GRC, Specialised Training</div>
+          <div><strong class="text-black">Primary Email:</strong> <a href="mailto:rkmvedant@gmail.com" class="text-emerald-700 font-bold hover:underline">rkmvedant@gmail.com</a></div>
+          <div><strong class="text-black">Alternate Email:</strong> <a href="mailto:rajeshbhagia500@gmail.com" class="text-slate-600 hover:underline">rajeshbhagia500@gmail.com</a></div>
+          <div><strong class="text-black">Mobile Hotline:</strong> <a href="tel:+919371650121" class="text-emerald-700 font-bold hover:underline">+91 9371650121</a></div>
+          <div><strong class="text-black">Location / Reach:</strong> India (HQ) • Global Advisory (US / EU / APAC)</div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-200 flex flex-wrap gap-3">
+          <a 
+            href="/contact" 
+            class="px-5 py-2.5 rounded-lg font-bold text-xs bg-[#16A34A] hover:bg-[#15803D] text-white shadow-xs transition-all"
+          >
+            Contact Practice Leadership
+          </a>
+          <a 
+            href="mailto:rkmvedant@gmail.com?subject=RKMIDIGILABS%20Partnership%20Inquiry" 
+            class="px-5 py-2.5 rounded-lg font-bold text-xs bg-[#112649] hover:bg-black text-white transition-all"
+          >
+            Direct Inquiry: rkmvedant@gmail.com
+          </a>
+        </div>
       </div>
 
     </div>
-
-  </div>
+  </section>
 </BaseLayout>
