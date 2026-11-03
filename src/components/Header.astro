@@ -73,24 +73,18 @@ const knowledgeLinks = [
     href: "/company-profile",
     desc: "Corporate Presentation & Verified Media",
     icon: `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`
-  },
-  {
-    name: "Crawl Page / Sitemap",
-    href: "/sitemap",
-    desc: "Search Engine Directory & Complete Index",
-    icon: `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>`
   }
 ];
 
 const isTrainingActive = currentPath.startsWith('/courses') || currentPath.startsWith('/specialised-training') || currentPath.startsWith('/corporate-training') || currentPath.startsWith('/certifications');
 const isAdvisoryActive = currentPath.startsWith('/services') || currentPath.startsWith('/frameworks') || currentPath.startsWith('/case-studies');
-const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.startsWith('/blog') || currentPath.startsWith('/about') || currentPath.startsWith('/company-profile') || currentPath.startsWith('/sitemap') || currentPath.startsWith('/crawl');
+const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.startsWith('/blog') || currentPath.startsWith('/about') || currentPath.startsWith('/company-profile');
 ---
 
 <!-- Header with background color #112649 and fonts in white color -->
 <header class="sticky top-0 z-50 bg-[#112649] text-white border-b border-[#1d3d75] shadow-md transition-all">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 sm:h-20">
+    <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
       
       <!-- Brand Logo & Company Name: RKMIDIGILABS -->
       <a href="/" class="flex items-center gap-3 group shrink-0">
@@ -205,16 +199,32 @@ const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.st
         </div>
       </nav>
 
+      <!-- Desktop Search Bar -->
+      <div class="hidden md:flex items-center flex-1 max-w-xs relative">
+        <button
+          type="button"
+          id="header-search-trigger"
+          class="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs bg-[#0b1a33] hover:bg-[#162f59] text-slate-300 border border-slate-700/80 transition-colors shadow-inner cursor-pointer"
+          title="Search RKMIDIGILABS (Ctrl+K)"
+        >
+          <span class="flex items-center gap-2 truncate">
+            <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <span class="text-slate-400 truncate">Search courses, GRC...</span>
+          </span>
+          <kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-800 rounded border border-slate-700 shrink-0">⌘K</kbd>
+        </button>
+      </div>
+
       <!-- Action Button & Working CTAs -->
-      <div class="hidden sm:flex items-center gap-2">
+      <div class="hidden sm:flex items-center gap-2 shrink-0">
         <!-- Direct Enquire Mail CTA Button to rkmvedant@gmail.com -->
         <a 
           href="mailto:rkmvedant@gmail.com?subject=Inquiry%20to%20RKMIDIGILABS%3A%20AI%20Governance%20%26%20GRC" 
-          class="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#1d3d75] hover:bg-[#254d93] text-emerald-300 border border-emerald-500/40 transition-all shadow-xs"
+          class="hidden 2xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#1d3d75] hover:bg-[#254d93] text-emerald-300 border border-emerald-500/40 transition-all shadow-xs"
           title="Direct Mail Inquiry to rkmvedant@gmail.com"
         >
           <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          <span>Enquire Mail</span>
+          <span>Enquire</span>
         </a>
 
         <!-- Student Portal CTA -->
@@ -237,8 +247,17 @@ const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.st
         </a>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <div class="flex lg:hidden">
+      <!-- Mobile Search & Menu Toggle -->
+      <div class="flex items-center gap-2 lg:hidden">
+        <button 
+          type="button" 
+          id="mobile-search-btn"
+          class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-[#1a3666]" 
+          aria-label="Open Search"
+        >
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
+
         <button 
           type="button" 
           id="mobile-menu-button"
@@ -254,6 +273,18 @@ const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.st
 
   <!-- Mobile Dropdown Menu with Complete Section Navigation -->
   <div id="mobile-menu" class="hidden lg:hidden border-b border-[#1d3d75] bg-[#0b1a33] px-4 pt-3 pb-6 space-y-4 shadow-2xl max-h-[80vh] overflow-y-auto">
+    
+    <!-- Mobile Search Bar Input -->
+    <div class="relative">
+      <input 
+        type="text" 
+        id="mobile-search-input"
+        placeholder="Search courses, frameworks, articles..."
+        class="w-full py-2 pl-9 pr-3 rounded-lg text-xs bg-[#162f59] border border-slate-700 text-white placeholder-slate-400 focus:outline-hidden focus:border-emerald-500"
+      />
+      <svg class="w-4 h-4 text-emerald-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    </div>
+    
     <a 
       href="/" 
       class="block px-3 py-2 rounded-lg text-sm font-bold text-white hover:bg-[#162f59]"
@@ -335,9 +366,83 @@ const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.st
       </a>
     </div>
   </div>
+
+  <!-- Search Overlay Modal -->
+  <div id="search-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden flex items-start justify-center pt-20 px-4">
+    <div class="bg-[#0b1a33] border-2 border-slate-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Search Input Area -->
+      <div class="p-4 border-b border-slate-700/80 flex items-center gap-3 bg-[#081324]">
+        <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input 
+          type="text" 
+          id="search-modal-input" 
+          placeholder="Search courses, frameworks, certifications, advisory services..." 
+          class="w-full bg-transparent text-white text-sm focus:outline-hidden placeholder-slate-400 font-medium"
+          autocomplete="off"
+        />
+        <button 
+          type="button" 
+          id="search-modal-close" 
+          class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors text-xs font-mono"
+        >
+          ESC
+        </button>
+      </div>
+
+      <!-- Live Search Results & Quick Links -->
+      <div id="search-results-container" class="max-h-96 overflow-y-auto p-4 space-y-2">
+        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 px-2 py-1">
+          Quick Domain Links
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" id="quick-links-grid">
+          <a href="/courses" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Courses & Academy</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/courses</span>
+          </a>
+          <a href="/specialised-training" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Specialised AI Training</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/specialised</span>
+          </a>
+          <a href="/corporate-training" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Corporate Training</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/corporate</span>
+          </a>
+          <a href="/certifications" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">AIGP & Certifications</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/certifications</span>
+          </a>
+          <a href="/services" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Advisory & GRC</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/services</span>
+          </a>
+          <a href="/case-studies" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Enterprise Case Studies</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/case-studies</span>
+          </a>
+          <a href="/frameworks" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Regulatory Frameworks</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/frameworks</span>
+          </a>
+          <a href="/resources" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+            <span class="font-bold">Learning Toolkits</span>
+            <span class="text-emerald-400 text-[10px] font-mono">/resources</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3 bg-[#081324] border-t border-slate-700/60 flex items-center justify-between text-[11px] font-mono text-slate-400">
+        <span>Search across 10 practice sections, courses & dispatches</span>
+        <span class="text-emerald-400">RKMIDIGILABS FastSearch</span>
+      </div>
+
+    </div>
+  </div>
 </header>
 
 <script>
+  // Mobile menu toggle
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
   if (menuButton && mobileMenu) {
@@ -345,4 +450,106 @@ const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.st
       mobileMenu.classList.toggle('hidden');
     });
   }
+
+  // Search Modal Trigger & Logic
+  const searchTrigger = document.getElementById('header-search-trigger');
+  const mobileSearchBtn = document.getElementById('mobile-search-btn');
+  const searchModal = document.getElementById('search-modal');
+  const searchClose = document.getElementById('search-modal-close');
+  const searchInput = document.getElementById('search-modal-input') as HTMLInputElement | null;
+
+  function openSearch() {
+    if (searchModal) {
+      searchModal.classList.remove('hidden');
+      setTimeout(() => searchInput?.focus(), 50);
+    }
+  }
+
+  function closeSearch() {
+    if (searchModal) {
+      searchModal.classList.add('hidden');
+    }
+  }
+
+  searchTrigger?.addEventListener('click', openSearch);
+  mobileSearchBtn?.addEventListener('click', openSearch);
+  searchClose?.addEventListener('click', closeSearch);
+
+  // Close search when clicking outside
+  searchModal?.addEventListener('click', (e) => {
+    if (e.target === searchModal) closeSearch();
+  });
+
+  // Keyboard shortcut Ctrl+K / Cmd+K and ESC
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      if (searchModal?.classList.contains('hidden')) openSearch();
+      else closeSearch();
+    }
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  // Client-side quick search filtering
+  const searchableItems = [
+    { name: "Courses & Masterclasses", href: "/courses", tags: "aigp iso 42001 nist rmf training video academy" },
+    { name: "Specialised Training", href: "/specialised-training", tags: "red-teaming prompt injection fria watermarking c2pa owasp" },
+    { name: "Corporate Training", href: "/corporate-training", tags: "workforce boardroom executive enterprise rfp cohort briefing" },
+    { name: "Certifications Roadmap", href: "/certifications", tags: "iapp aigp iso 42001 lead auditor lead implementer cisa crisc" },
+    { name: "Advisory Services", href: "/services", tags: "consultancy eu ai act high risk annex iii soc 2 tprm audit" },
+    { name: "Enterprise Case Studies", href: "/case-studies", tags: "fintech healthtech saas retail results outcomes metrics" },
+    { name: "Regulatory Frameworks", href: "/frameworks", tags: "eu ai act nist ai rmf 1.0 iso 27001 iso 42001 standards" },
+    { name: "Learning Resources & Toolkits", href: "/resources", tags: "free templates checklists fria genai policy glossary lexicon" },
+    { name: "Blog & Video Dispatches", href: "/blog", tags: "articles dispatches videos youtube news compliance" },
+    { name: "About RKMIDIGILABS", href: "/about", tags: "mission leadership company rajesh bhagia contact credentials" },
+    { name: "Company Profile & Deck", href: "/company-profile", tags: "deck brochure media presentation channels youtube linkedin" }
+  ];
+
+  searchInput?.addEventListener('input', (e) => {
+    const q = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    const container = document.getElementById('search-results-container');
+    if (!container) return;
+
+    if (!q) {
+      container.innerHTML = `
+        <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 px-2 py-1">Quick Domain Links</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          ${searchableItems.slice(0, 8).map(i => `
+            <a href="${i.href}" class="p-2.5 rounded-lg bg-[#112649] hover:bg-[#1d3d75] text-white flex items-center justify-between transition-colors">
+              <span class="font-bold">${i.name}</span>
+              <span class="text-emerald-400 text-[10px] font-mono">${i.href}</span>
+            </a>
+          `).join('')}
+        </div>
+      `;
+      return;
+    }
+
+    const filtered = searchableItems.filter(item => 
+      item.name.toLowerCase().includes(q) || item.tags.includes(q) || item.href.includes(q)
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="p-6 text-center text-slate-400 text-xs font-mono">
+          No matches found for "<span class="text-white">${q}</span>". Try "AIGP", "ISO 42001", "EU AI Act", or "Red-Teaming".
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="text-[11px] font-mono uppercase tracking-wider text-emerald-400 px-2 py-1">${filtered.length} Results Found</div>
+        <div class="space-y-1.5">
+          ${filtered.map(i => `
+            <a href="${i.href}" class="p-3 rounded-lg bg-[#112649] hover:bg-[#162f59] text-white flex items-center justify-between transition-colors border border-slate-700/60 block">
+              <div>
+                <div class="font-bold text-sm text-white hover:text-emerald-300">${i.name}</div>
+                <div class="text-[11px] text-slate-300 font-mono mt-0.5">${i.tags}</div>
+              </div>
+              <span class="text-emerald-400 text-xs font-mono font-bold">${i.href} →</span>
+            </a>
+          `).join('')}
+        </div>
+      `;
+    }
+  });
 </script>

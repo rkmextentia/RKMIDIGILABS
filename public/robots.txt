@@ -25,5 +25,4 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-# Search Engine Crawl Directory & HTML Index: https://rkmidigilabs.vercel.app/sitemap
 Sitemap: https://rkmidigilabs.vercel.app/sitemap.xml
