@@ -290,11 +290,21 @@ const staticPosts = staticCollection.map(p => ({
         </div>
 
         <!-- Executive Summary & Tags -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="bg-white p-5 rounded-xl border-2 border-emerald-500/40 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                INSTANCE 1 (ABOVE): EXECUTIVE BRIEF / SOURCE CONTEXT
+              </span>
+              <span class="hidden sm:inline text-[11px] text-slate-500">• Standalone Field</span>
+            </div>
+            <span class="text-[10px] text-emerald-700 font-mono font-bold">SEO & Abstract</span>
+          </div>
+
           <div>
             <div class="flex items-center justify-between mb-1.5">
               <label for="post-summary" class="text-xs font-bold uppercase tracking-wider text-slate-700">
-                Executive Summary (Google SEO & Social Snippet)
+                Executive Summary (Pasted or Drafted Above)
               </label>
               <span id="summary-counter" class="text-[11px] font-mono text-slate-400">0 / 220 chars</span>
             </div>
@@ -324,8 +334,13 @@ const staticPosts = staticCollection.map(p => ({
             <div class="flex items-center gap-2">
               <span class="w-7 h-7 rounded-lg bg-[#112649] text-white flex items-center justify-center text-sm font-bold">🚀</span>
               <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-black">Social Media Cross-Posting & Ad Studio</h3>
-                <p class="text-[11px] text-slate-500">Push directly to LinkedIn, X, Facebook, and WhatsApp Broadcast</p>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xs font-bold uppercase tracking-wider text-black">Social Media Broadcast Studio</h3>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-100 text-blue-800 border border-blue-300">
+                    INSTANCE 2 (INDEPENDENT)
+                  </span>
+                </div>
+                <p class="text-[11px] text-slate-500">Decoupled instance — writing here will not be overwritten by text pasted above</p>
               </div>
             </div>
             <label class="flex items-center gap-2 cursor-pointer">
@@ -361,7 +376,7 @@ const staticPosts = staticCollection.map(p => ({
                 Custom Social Post / Ad Copy
               </label>
               <button type="button" id="refresh-social-copy-btn" class="text-[11px] font-bold text-[#16A34A] hover:underline flex items-center gap-1">
-                <span>↻ Refresh from Title/Summary</span>
+                <span>↻ Import from Title/Summary (Manual Only)</span>
               </button>
             </div>
             <textarea 
@@ -400,12 +415,45 @@ const staticPosts = staticCollection.map(p => ({
         </div>
 
         <!-- Markdown Body Editor with Quick Toolbar -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
-          <div class="flex items-center justify-between">
-            <label for="post-body" class="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Article Content (Markdown)
-            </label>
+        <div class="bg-white p-5 rounded-xl border-2 border-purple-500/40 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-100 text-purple-800 border border-purple-300">
+                INSTANCE 3 (BELOW): FULL ARTICLE BODY (MARKDOWN)
+              </span>
+              <span class="hidden sm:inline text-[11px] text-slate-500">• Independent Lower Workspace</span>
+            </div>
             <span class="text-[11px] text-slate-400">Supports headers, lists, checklists</span>
+          </div>
+
+          <!-- Live Reference Drawer: Easily read content pasted above while writing below -->
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-300 shadow-2xs">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  <span>Live Reference: View Content Pasted in Instance 1 Above</span>
+                </span>
+              </div>
+              <button 
+                type="button" 
+                id="toggle-above-ref-btn" 
+                class="text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded border border-blue-200 transition-colors cursor-pointer"
+              >
+                Hide Reference View
+              </button>
+            </div>
+            <div 
+              id="above-ref-content" 
+              class="text-xs text-slate-700 font-mono bg-white p-3 rounded-lg border border-slate-200 max-h-32 overflow-y-auto whitespace-pre-wrap leading-relaxed select-text"
+            >
+              (Content pasted into Instance 1 above will appear here in real-time so you can easily reference it while writing down below)
+            </div>
+            <div class="flex items-center justify-between mt-1.5 text-[10px] text-slate-500 font-mono">
+              <span>Read-only reference view — writing below will never clash with this text</span>
+              <button type="button" id="copy-above-ref-btn" class="text-emerald-700 hover:underline font-bold cursor-pointer">Copy Reference</button>
+            </div>
           </div>
 
           <!-- Markdown Toolbar -->
@@ -1163,9 +1211,8 @@ const staticPosts = staticCollection.map(p => ({
     showToast('Refreshed social post copy!');
   });
 
-  titleInput?.addEventListener('input', () => updateSocialCopy());
-  summaryInput?.addEventListener('input', () => updateSocialCopy());
-  tagsInput?.addEventListener('input', () => updateSocialCopy());
+  // Decoupled instances: Social copy is NOT auto-overwritten on summary input
+  // Only manual refresh via refreshSocialCopyBtn updates it on demand.
 
   // Launch buttons
   document.getElementById('launch-linkedin-btn')?.addEventListener('click', () => {
@@ -1197,6 +1244,35 @@ const staticPosts = staticCollection.map(p => ({
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
     showToast('Launched LinkedIn, X, WhatsApp, and Facebook share windows!');
+  });
+
+
+  // --- Live Reference Drawer (View Above Text While Writing Below) ---
+  function syncAboveReference() {
+    const refBox = document.getElementById('above-ref-content');
+    if (!refBox) return;
+    const text = summaryInput?.value.trim();
+    refBox.textContent = text || '(No text entered in Instance 1 above yet. Paste or draft your summary above to reference it here.)';
+  }
+  summaryInput?.addEventListener('input', syncAboveReference);
+  syncAboveReference();
+
+  const toggleRefBtn = document.getElementById('toggle-above-ref-btn');
+  toggleRefBtn?.addEventListener('click', () => {
+    const refBox = document.getElementById('above-ref-content');
+    if (refBox) {
+      const isHidden = refBox.classList.toggle('hidden');
+      toggleRefBtn.textContent = isHidden ? 'Show Reference View' : 'Hide Reference View';
+    }
+  });
+
+  const copyRefBtn = document.getElementById('copy-above-ref-btn');
+  copyRefBtn?.addEventListener('click', () => {
+    const text = summaryInput?.value.trim();
+    if (text) {
+      navigator.clipboard.writeText(text);
+      showToast('Copied above reference text!');
+    }
   });
 
   // Save changes
