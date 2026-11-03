@@ -73,12 +73,18 @@ const knowledgeLinks = [
     href: "/company-profile",
     desc: "Corporate Presentation & Verified Media",
     icon: `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`
+  },
+  {
+    name: "Crawl Page / Sitemap",
+    href: "/sitemap",
+    desc: "Search Engine Directory & Complete Index",
+    icon: `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>`
   }
 ];
 
 const isTrainingActive = currentPath.startsWith('/courses') || currentPath.startsWith('/specialised-training') || currentPath.startsWith('/corporate-training') || currentPath.startsWith('/certifications');
 const isAdvisoryActive = currentPath.startsWith('/services') || currentPath.startsWith('/frameworks') || currentPath.startsWith('/case-studies');
-const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.startsWith('/blog') || currentPath.startsWith('/about') || currentPath.startsWith('/company-profile');
+const isKnowledgeActive = currentPath.startsWith('/resources') || currentPath.startsWith('/blog') || currentPath.startsWith('/about') || currentPath.startsWith('/company-profile') || currentPath.startsWith('/sitemap') || currentPath.startsWith('/crawl');
 ---
 
 <!-- Header with background color #112649 and fonts in white color -->

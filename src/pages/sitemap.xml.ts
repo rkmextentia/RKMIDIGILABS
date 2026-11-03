@@ -16,6 +16,8 @@ export async function GET(context: APIContext) {
     '/case-studies/',
     '/certifications/',
     '/resources/',
+    '/sitemap/',
+    '/crawl/',
     '/company-profile/',
     '/services/',
     '/frameworks/',
